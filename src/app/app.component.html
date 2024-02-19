@@ -1,0 +1,22 @@
+<div class="appContainer">
+  <h1 class="appHeader">Lottery app</h1>
+  <p>This app helps you create lottery tickets. Use the form below to choose the number of tickets to be created, click
+    the checkbox to include the "Superzahl" number and receive your ticket combinations. Good luck! :)</p>
+
+  <mat-form-field class="formField">
+    <mat-label>Number of tickets to be generated</mat-label>
+    <input matInput type="text" [(ngModel)]="ticketsNo" class="ticketNoInputs">
+    @if (ticketsNo) {
+    <button matSuffix mat-icon-button (click)="ticketsNo=''">
+      <mat-icon>close</mat-icon>
+    </button>
+    }
+  </mat-form-field>
+  <mat-checkbox class="checkbox" color="primary" [(ngModel)]="includeSuperzahl">Include Superzahl</mat-checkbox><br />
+
+  <button mat-raised-button color="primary" (click)="generateTickets()" [disabled]="!ticketsNo">Draw tickets</button><br /><br />
+
+  @for (ticket of ticketsArray; track ticket){
+  <app-ticket-box [ticket]="ticket"/><br />
+  }
+</div>

@@ -1,0 +1,14 @@
+<mat-card>
+    <mat-card-content>
+        @for (number of ticket.numbers; track number) {
+        <span class="numberSpan">
+            {{ number }}&nbsp;
+        </span>
+        }
+        @if (ticket.superzahl !== undefined) {
+        <span class="superzahlSpan">
+            {{ ticket.superzahl}}
+        </span>
+        }
+    </mat-card-content>
+</mat-card>
