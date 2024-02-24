@@ -9,11 +9,23 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TicketBoxComponent } from './ticket-box/ticket-box.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Ticket } from './shared/types';
+import { TicketsServiceComponent } from './shared/services/tickets-service/tickets-service.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatIconModule, MatButtonModule, FormsModule, MatInputModule, MatFormFieldModule, MatCheckboxModule, TicketBoxComponent],
+  imports: [
+    RouterOutlet,
+    MatIconModule,
+    MatButtonModule,
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    TicketBoxComponent,
+    TicketsServiceComponent
+  ],
+  providers: [ TicketsServiceComponent ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -24,15 +36,15 @@ export class AppComponent {
   includeSuperzahl = false;
   ticketsArray: Array<Ticket> = [];
 
-  constructor(private _snackBar: MatSnackBar) { }
+  constructor(private _snackBar: MatSnackBar, private ticketsService: TicketsServiceComponent) { }
 
-  generateTickets = () => {
+  generateTickets = (): void => {
     this.ticketsArray = [];
     if (Number.isNaN(parseInt(this.ticketsNo))) {
       this._snackBar.open('Please enter a number', 'Close', { duration: 3000, verticalPosition: 'top' })
       return;
     }
-    for (let index = 0; index < parseInt(this.ticketsNo); index++) {      
+    for (let index = 0; index < parseInt(this.ticketsNo); index++) {
       this.ticketsArray.push({
         numbers: this.generateNumbers(),
         superzahl: this.generateSuperzahl()
@@ -52,14 +64,19 @@ export class AppComponent {
         this.generateNumbers(numbersArray);
       }
     }
-    return numbersArray.sort((a ,b) => a-b);
+    return numbersArray.sort((a, b) => a - b);
   }
 
-  private generateSuperzahl = () => {
+  private generateSuperzahl = (): number | undefined => {
     if (this.includeSuperzahl) {
       return Math.floor(Math.random() * (9 - 0) + 0);
     } else {
       return undefined;
     }
   }
+
+  doRequest = () => {
+    this.ticketsService.doRequest();
+  }
+
 }
