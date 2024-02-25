@@ -1,5 +1,5 @@
 export interface Ticket {
     numbers: number[];
-    superzahl?: number
+    superzahl?: number | null;
   }
   

@@ -10,6 +10,7 @@ import { TicketBoxComponent } from './ticket-box/ticket-box.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Ticket } from './shared/types';
 import { TicketsServiceComponent } from './shared/services/tickets-service/tickets-service.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-root',
@@ -23,9 +24,10 @@ import { TicketsServiceComponent } from './shared/services/tickets-service/ticke
     MatFormFieldModule,
     MatCheckboxModule,
     TicketBoxComponent,
-    TicketsServiceComponent
+    TicketsServiceComponent,
+    MatDividerModule
   ],
-  providers: [ TicketsServiceComponent ],
+  providers: [TicketsServiceComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -35,13 +37,14 @@ export class AppComponent {
   ticketsNo = '';
   includeSuperzahl = false;
   ticketsArray: Array<Ticket> = [];
+  savedTicketsArray: Array<Ticket> = [];
 
   constructor(private _snackBar: MatSnackBar, private ticketsService: TicketsServiceComponent) { }
 
   generateTickets = (): void => {
     this.ticketsArray = [];
     if (Number.isNaN(parseInt(this.ticketsNo))) {
-      this._snackBar.open('Please enter a number', 'Close', { duration: 3000, verticalPosition: 'top' })
+      this._snackBar.open('Please enter a number', 'Close', { duration: 3000, verticalPosition: 'top' });
       return;
     }
     for (let index = 0; index < parseInt(this.ticketsNo); index++) {
@@ -50,6 +53,11 @@ export class AppComponent {
         superzahl: this.generateSuperzahl()
       });
     }
+    this.ticketsService.sendTickets(this.ticketsArray).subscribe({
+      next: () => {
+        this.getAllTickets(false);
+      }
+    });
   }
 
   private generateNumbers = (numbersArray?: number[]): number[] => {
@@ -75,8 +83,20 @@ export class AppComponent {
     }
   }
 
-  doRequest = () => {
-    this.ticketsService.doRequest();
+  getAllTickets = (showWarning: boolean) => {
+    this.ticketsService.getAllTickets().subscribe(resp => {
+      if (showWarning && resp.savedTickets.length === 0) {
+        this._snackBar.open('There are no saved tickets yet', 'Close', { duration: 3000, verticalPosition: 'top' })
+      }
+      this.savedTicketsArray = resp.savedTickets;
+    });
   }
 
+  deleteTickets = () => {
+    this.ticketsService.deleteTickets().subscribe({
+      next: () => {
+        this.getAllTickets(false);
+      }
+    });
+  }
 }

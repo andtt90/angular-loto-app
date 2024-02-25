@@ -26,3 +26,11 @@
 .generateButton {
     margin-bottom: 2em;
 }
+
+mat-divider {
+    padding-bottom: 1.2em;
+}
+
+button.deleteButton {
+    margin-left: 1em;
+}

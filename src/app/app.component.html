@@ -19,5 +19,10 @@
   @for (ticket of ticketsArray; track ticket){
   <app-ticket-box [ticket]="ticket"/><br />
   }
-  <button (click)="doRequest()">Do request</button>
+  <mat-divider/>
+  <button mat-raised-button color="primary" (click)="getAllTickets(true)">Show saved tickets</button>
+  <button mat-raised-button color="warn" class="deleteButton" (click)="deleteTickets()">Delete tickets</button><br /><br />
+  @for (ticket of savedTicketsArray; track ticket){
+    <app-ticket-box [ticket]="ticket"/><br />
+    }
 </div>
