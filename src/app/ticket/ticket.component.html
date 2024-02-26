@@ -1,0 +1,14 @@
+<mat-card>
+    <mat-card-content>
+        <mat-grid-list cols="4" rowHeight="2:1">
+            @for (box of ticket.boxesArray; track box) {        
+                <mat-grid-tile><app-box-component [numbers]="box.numbers"/></mat-grid-tile>
+                }           
+          </mat-grid-list>
+        @if (ticket.superzahl !== undefined && ticket.superzahl !== null) {
+        <span class="superzahlSpan">
+            Superzahl: {{ ticket.superzahl}}
+        </span>
+        }
+    </mat-card-content>
+</mat-card>

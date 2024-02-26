@@ -6,11 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { TicketBoxComponent } from './ticket-box/ticket-box.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Ticket } from './shared/types';
 import { TicketsServiceComponent } from './shared/services/tickets-service/tickets-service.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { TicketComponent } from './ticket/ticket.component';
+import {MatListModule} from '@angular/material/list';
+import { MatDialog } from '@angular/material/dialog';
+import { TicketDialogComponent } from './ticket-dialog/ticket-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -23,9 +26,11 @@ import { MatDividerModule } from '@angular/material/divider';
     MatInputModule,
     MatFormFieldModule,
     MatCheckboxModule,
-    TicketBoxComponent,
     TicketsServiceComponent,
-    MatDividerModule
+    MatDividerModule,
+    TicketComponent,
+    MatListModule,
+    TicketDialogComponent
   ],
   providers: [TicketsServiceComponent],
   templateUrl: './app.component.html',
@@ -34,28 +39,35 @@ import { MatDividerModule } from '@angular/material/divider';
 
 export class AppComponent {
   title = 'lottery-app';
-  ticketsNo = '';
+  boxesNo = '';
   includeSuperzahl = false;
-  ticketsArray: Array<Ticket> = [];
+  ticket: Ticket = <Ticket>{};
   savedTicketsArray: Array<Ticket> = [];
 
-  constructor(private _snackBar: MatSnackBar, private ticketsService: TicketsServiceComponent) { }
+  constructor(private _snackBar: MatSnackBar, private ticketsService: TicketsServiceComponent, public dialog: MatDialog) { }
 
-  generateTickets = (): void => {
-    this.ticketsArray = [];
-    if (Number.isNaN(parseInt(this.ticketsNo))) {
+  ngOnInit () {
+    this.getAllTickets();
+  }
+
+  generateTicket = (): void => {
+    let boxesArray = []
+    if (Number.isNaN(parseInt(this.boxesNo))) {
       this._snackBar.open('Please enter a number', 'Close', { duration: 3000, verticalPosition: 'top' });
       return;
     }
-    for (let index = 0; index < parseInt(this.ticketsNo); index++) {
-      this.ticketsArray.push({
-        numbers: this.generateNumbers(),
-        superzahl: this.generateSuperzahl()
+    for (let index = 0; index < parseInt(this.boxesNo); index++) {
+      boxesArray.push({
+        numbers: this.generateNumbers(),        
       });
+      this.ticket = {
+        boxesArray,
+        superzahl: this.generateSuperzahl()
+      }
     }
-    this.ticketsService.sendTickets(this.ticketsArray).subscribe({
+    this.ticketsService.sendTicket(this.ticket).subscribe({
       next: () => {
-        this.getAllTickets(false);
+        this.getAllTickets();
       }
     });
   }
@@ -83,20 +95,33 @@ export class AppComponent {
     }
   }
 
-  getAllTickets = (showWarning: boolean) => {
+  getAllTickets = () => {
     this.ticketsService.getAllTickets().subscribe(resp => {
-      if (showWarning && resp.savedTickets.length === 0) {
-        this._snackBar.open('There are no saved tickets yet', 'Close', { duration: 3000, verticalPosition: 'top' })
-      }
       this.savedTicketsArray = resp.savedTickets;
     });
   }
 
-  deleteTickets = () => {
-    this.ticketsService.deleteTickets().subscribe({
-      next: () => {
-        this.getAllTickets(false);
+  // deleteTickets = () => {
+  //   this.ticketsService.deleteTickets().subscribe({
+  //     next: () => {
+  //       this.getAllTickets();
+  //     }
+  //   });
+  // }
+  
+  getTicketById = (id: number | undefined) => {
+    this.ticketsService.getTicketById(id).subscribe({
+      next: (resp) => {
+        this.openTicketDialog(resp);
       }
+    })
+  }
+
+  openTicketDialog(ticket: any) {
+    this.dialog.open(TicketDialogComponent, {
+      data: {
+        ticket
+      },
     });
   }
 }

@@ -14,13 +14,9 @@ export class TicketsServiceComponent {
 
   constructor(private http: HttpClient) { }
 
-  doRequest = () => {
-    this.http.get(this.backendUrl).subscribe( resp => (console.log(resp)));
-  }
-
-  sendTickets = (ticketsArray: Array<Ticket>) => {
-    return this.http.post(`${this.backendUrl}/sendTickets`, {
-      ticketsArray
+  sendTicket = (ticket: Ticket) => {
+    return this.http.post(`${this.backendUrl}/sendTicket`, {
+      ticket
     });
   }
 
@@ -28,7 +24,11 @@ export class TicketsServiceComponent {
     return this.http.get<any>(`${this.backendUrl}/getAllTickets`);
   }
 
-  deleteTickets = () => {
-    return this.http.delete<any>(`${this.backendUrl}/deleteTickets`)
+  // deleteTickets = () => {
+  //   return this.http.delete<any>(`${this.backendUrl}/deleteTickets`)
+  // }
+
+  getTicketById = (id: number | undefined) => {
+    return this.http.get<any>(`${this.backendUrl}/ticket/${id}`);
   }
 }

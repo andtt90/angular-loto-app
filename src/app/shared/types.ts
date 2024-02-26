@@ -1,5 +1,10 @@
 export interface Ticket {
-    numbers: number[];
-    superzahl?: number | null;
-  }
+  id?: number;
+  boxesArray: Box[];
+  superzahl?: number | null;
+}
+
+export interface Box {
+  numbers: number[];
+}
   
