@@ -24,9 +24,9 @@ export class TicketsServiceComponent {
     return this.http.get<any>(`${this.backendUrl}/getAllTickets`);
   }
 
-  // deleteTickets = () => {
-  //   return this.http.delete<any>(`${this.backendUrl}/deleteTickets`)
-  // }
+  deleteTickets = () => {
+    return this.http.delete<any>(`${this.backendUrl}/deleteTickets`)
+  }
 
   getTicketById = (id: number | undefined) => {
     return this.http.get<any>(`${this.backendUrl}/ticket/${id}`);

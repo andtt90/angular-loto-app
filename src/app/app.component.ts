@@ -7,11 +7,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Ticket } from './shared/types';
+import { Box, NumberFrequency, Ticket } from './shared/types';
 import { TicketsServiceComponent } from './shared/services/tickets-service/tickets-service.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { TicketComponent } from './ticket/ticket.component';
-import {MatListModule} from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';
 import { MatDialog } from '@angular/material/dialog';
 import { TicketDialogComponent } from './ticket-dialog/ticket-dialog.component';
 
@@ -43,11 +43,13 @@ export class AppComponent {
   includeSuperzahl = false;
   ticket: Ticket = <Ticket>{};
   savedTicketsArray: Array<Ticket> = [];
+  numbersFrequencyDictionary: NumberFrequency[] = [];
 
   constructor(private _snackBar: MatSnackBar, private ticketsService: TicketsServiceComponent, public dialog: MatDialog) { }
 
-  ngOnInit () {
+  ngOnInit() {
     this.getAllTickets();
+    this.numbersFrequencyDictionary = this.generateNumbersFrequencyDictionary();
   }
 
   generateTicket = (): void => {
@@ -58,7 +60,7 @@ export class AppComponent {
     }
     for (let index = 0; index < parseInt(this.boxesNo); index++) {
       boxesArray.push({
-        numbers: this.generateNumbers(),        
+        numbers: this.generateNumbers(),
       });
       this.ticket = {
         boxesArray,
@@ -97,18 +99,18 @@ export class AppComponent {
 
   getAllTickets = () => {
     this.ticketsService.getAllTickets().subscribe(resp => {
-      this.savedTicketsArray = resp.savedTickets;
+      const savedTickets = resp.savedTickets;
+      this.savedTicketsArray = savedTickets;
+      savedTickets.forEach( (ticket: Ticket) => {
+        ticket.boxes?.forEach( (box: any) => {
+          box.forEach((number: any) => {
+            this.numbersFrequencyDictionary[number].frequency++;
+          });
+        })
+      })
     });
   }
 
-  // deleteTickets = () => {
-  //   this.ticketsService.deleteTickets().subscribe({
-  //     next: () => {
-  //       this.getAllTickets();
-  //     }
-  //   });
-  // }
-  
   getTicketById = (id: number | undefined) => {
     this.ticketsService.getTicketById(id).subscribe({
       next: (resp) => {
@@ -122,6 +124,26 @@ export class AppComponent {
       data: {
         ticket
       },
+    });
+  }
+
+  generateNumbersFrequencyDictionary(): NumberFrequency[] {
+    let numbersFrequencyDictionary: NumberFrequency[] = [];
+    for (let i = 0; i <= 49; i++) {
+      numbersFrequencyDictionary.push({
+        number: i,
+        frequency: 0
+      });
+    }
+    return numbersFrequencyDictionary;
+  }
+
+  deleteTickets = () => {
+    this.ticketsService.deleteTickets().subscribe({
+      next: () => {
+        this.getAllTickets();
+        this.numbersFrequencyDictionary = this.generateNumbersFrequencyDictionary();
+      }
     });
   }
 }

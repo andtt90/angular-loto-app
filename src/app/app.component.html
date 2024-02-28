@@ -23,7 +23,15 @@
   <h3>Tickets list</h3>
   <mat-list role="list">
     @for (ticket of savedTicketsArray; track ticket) {
-    <mat-list-item role="listitem" (click)="getTicketById(ticket.id)">Ticket number {{ticket.id}}</mat-list-item>
+    <mat-list-item class="ticketListItem" role="listitem" (click)="getTicketById(ticket.id)">Ticket number {{ticket.id}}</mat-list-item>
   }
   </mat-list>
+  <mat-divider />
+  <h4>Frequency of drawn numbers:</h4>
+  @for (item of numbersFrequencyDictionary; track item) {
+    @if (item.frequency > 0){
+    <p>Number: {{item.number}} || Frequency: {{item.frequency}}</p>
+    }
+  }
+  <button mat-raised-button color="warn" (click)="deleteTickets()">Delete all tickets</button>  
 </div>
