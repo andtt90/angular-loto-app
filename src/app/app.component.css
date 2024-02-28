@@ -34,3 +34,7 @@ mat-divider {
 mat-list-item.ticketListItem {
     cursor: pointer;
 }
+
+.frequencyButton {
+    margin-right: 2em;
+}

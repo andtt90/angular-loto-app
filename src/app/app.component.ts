@@ -14,6 +14,7 @@ import { TicketComponent } from './ticket/ticket.component';
 import { MatListModule } from '@angular/material/list';
 import { MatDialog } from '@angular/material/dialog';
 import { TicketDialogComponent } from './ticket-dialog/ticket-dialog.component';
+import { NumberFrequencyDialogComponent } from './number-frequency-dialog/number-frequency-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +31,8 @@ import { TicketDialogComponent } from './ticket-dialog/ticket-dialog.component';
     MatDividerModule,
     TicketComponent,
     MatListModule,
-    TicketDialogComponent
+    TicketDialogComponent,
+    NumberFrequencyDialogComponent
   ],
   providers: [TicketsServiceComponent],
   templateUrl: './app.component.html',
@@ -125,6 +127,14 @@ export class AppComponent {
         ticket
       },
     });
+  }
+
+  openNumberFrequencyDialog(numbersFrequencyDictionary: NumberFrequency[]) {
+    this.dialog.open(NumberFrequencyDialogComponent, {
+      data: {
+        numbersFrequencyDictionary
+      }
+    })
   }
 
   generateNumbersFrequencyDictionary(): NumberFrequency[] {

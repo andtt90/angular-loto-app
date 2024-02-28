@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Frequency of drawn numbers</h2>
+<mat-dialog-content>
+    <table mat-table [dataSource]="numbersFrequencyDictionary" class="mat-elevation-z8 numbersFrequencytable">
+        <ng-container matColumnDef="number">
+            <th mat-header-cell *matHeaderCellDef>Number</th>
+            <td mat-cell *matCellDef="let element"> {{element.number}} </td>
+        </ng-container>
+        <ng-container matColumnDef="frequency">
+            <th mat-header-cell *matHeaderCellDef>Frequency</th>
+            <td mat-cell *matCellDef="let element"> {{element.frequency}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['number', 'frequency']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['number', 'frequency'];"></tr>
+    </table>
+</mat-dialog-content>

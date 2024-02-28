@@ -27,11 +27,6 @@
   }
   </mat-list>
   <mat-divider />
-  <h4>Frequency of drawn numbers:</h4>
-  @for (item of numbersFrequencyDictionary; track item) {
-    @if (item.frequency > 0){
-    <p>Number: {{item.number}} || Frequency: {{item.frequency}}</p>
-    }
-  }
+  <button mat-raised-button color="basic" class="frequencyButton" (click)="openNumberFrequencyDialog(numbersFrequencyDictionary)">Show frequency of drawn numbers</button>  
   <button mat-raised-button color="warn" (click)="deleteTickets()">Delete all tickets</button>  
 </div>

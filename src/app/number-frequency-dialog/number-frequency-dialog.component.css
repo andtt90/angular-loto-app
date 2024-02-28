@@ -1,0 +1,25 @@
+mat-dialog-content {
+    min-width: 30em;
+    max-width: 30em;
+    min-height: 40em;
+    max-height: 40em;
+    width: 100%;
+}
+
+table.numbersFrequencytable {
+    margin: 2em auto 2em auto;
+    min-width: 18em;
+    max-width: 18em;
+    min-height: 10em;
+    max-height: 30em;
+    width: 100%;
+}
+
+th, td {
+    text-align: center;
+}
+
+th {
+    font-size: large;
+    color: grey;
+}

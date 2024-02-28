@@ -14,6 +14,7 @@ import { Ticket } from '../shared/types';
   standalone: true,
   imports: [TicketComponent, MatDialogContent, MatDialogTitle],
 })
+
 export class TicketDialogComponent {
   ticket: Ticket = {
     boxesArray: []
@@ -21,5 +22,4 @@ export class TicketDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.ticket = data.ticket;
   }
-
 }
